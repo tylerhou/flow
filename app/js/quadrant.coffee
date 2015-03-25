@@ -4,6 +4,7 @@ class Quadrant
     @center = @topLeft.midpoint(@bottomRight)
     @circles = []
     @quadrants = (null for i in [0...4])
+    @MAX_DEPTH = Infinity
 
   call: (func) ->
     for circle in circles
@@ -16,6 +17,7 @@ class Quadrant
     if circle.point.x - circle.radius < @center.x < circle.point.x + circle.radius or circle.point.y - circle.radius < @center.y < circle.point.y + circle.radius then -1 else (if circle.point.x > @center.x then 1 else 0) + (if circle.point.y > @center.y then 2 else 0)
 
   insert: (circle) ->
+    #console.log circle
     num = @index(circle)
     if num == -1
       @circles.push(circle)
@@ -27,6 +29,13 @@ class Quadrant
         bottomRight = new Point((if num % 2 == 0 then @center.x else @bottomRight.x), (if num < 2 then @center.y else @bottomRight.y))
         @quadrants[num] = new Quadrant(@stage, topLeft, bottomRight)
         @quadrants[num].insert(circle)
+
+  remove: (circle) ->
+    num = @index(circle)
+    if num == -1
+      @circles.splice(@circles.indexOf(circle), 1)
+    else
+      @quadrants[num].remove(circle)
 
   retrieve: (circle) ->
     num = @index(circle)
@@ -43,7 +52,7 @@ class Quadrant
       if quadrant?
         quadrant.draw()
 
-  remove: ->
+  undraw: ->
     @stage.removeChild(@rectangle)
     for quadrant in @quadrants
       if quadrant?

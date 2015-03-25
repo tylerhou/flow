@@ -31,4 +31,4 @@ class Circle
     Math.sqrt(Math.pow(circle.point.x - @point.x, 2) + Math.pow(circle.point.y - @point.y, 2))
 
   intersect: (circle) ->
-    Math.pow(circle.point.x - @point.x, 2) + Math.pow(circle.point.y - @point.y, 2) < Math.pow(circle.radius + @radius, 2)
+    Math.pow(circle.point.x - @point.x, 2) + Math.pow(circle.point.y - @point.y, 2) < Math.pow(circle.radius + @radius, 2) and circle != this
