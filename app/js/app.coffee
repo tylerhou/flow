@@ -3,10 +3,10 @@ $('#flowcanvas').attr('height', $(window).height().toString())
 stage = new createjs.Stage('flowcanvas')
 randPoint = -> new Point(Math.random()*$(window).width(), Math.random()*$(window).height())
 randVector = -> new Vector(500*(Math.random()-.5), 500*(Math.random()-.5))
-#circles = (new Circle(stage, randPoint(), randVector(), 25*Math.random(), 'red') for i in [0...75])
-circles = []
-circles.push(new Circle(stage, new Point($(window).width() / 2 + 25 + 50*i, $(window).height() / 2), new Vector(0, 0), 25, 'red')) for i in [-3...3]
-circles[0].vector.dx = 1000
+circles = (new Circle(stage, randPoint(), randVector(), 20*Math.random()+5, 'red') for i in [0...75])
+#circles = []
+#circles.push(new Circle(stage, new Point($(window).width() / 2 + 25 + 50*i, $(window).height() / 2), new Vector(0, 0), 25, 'red')) for i in [-3...3]
+#circles[0].vector.dx = 1000
 #circles = []
 colors = []
 #colors = colors.concat('rgb(' + (45*i+40) + ',0,0)' for i in [0..5]) # red
@@ -121,8 +121,7 @@ createjs.Ticker.addEventListener 'tick', frame = (event={delta: 1000}) ->
         if circle.intersect(other)
           collide(quadtree, circle, other)
       catch error
-        console.log circle, a, `n`
-
+ 
   #console.log createjs.Ticker.getMeasuredFPS()
   #console.log energy
   #quadtree.draw()

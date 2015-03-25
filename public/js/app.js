@@ -257,7 +257,7 @@ Quadrant = (function() {
 
 })();
 
-var circle, circles, collide, collideTime, colors, frame, i, j, k, len, randPoint, randVector, stage;
+var circle, circles, collide, collideTime, colors, frame, i, j, len, randPoint, randVector, stage;
 
 $('#flowcanvas').attr('width', $(window).width().toString());
 
@@ -273,20 +273,21 @@ randVector = function() {
   return new Vector(500 * (Math.random() - .5), 500 * (Math.random() - .5));
 };
 
-circles = [];
-
-for (i = j = -3; j < 3; i = ++j) {
-  circles.push(new Circle(stage, new Point($(window).width() / 2 + 25 + 50 * i, $(window).height() / 2), new Vector(0, 0), 25, 'red'));
-}
-
-circles[0].vector.dx = 1000;
+circles = (function() {
+  var j, results;
+  results = [];
+  for (i = j = 0; j < 75; i = ++j) {
+    results.push(new Circle(stage, randPoint(), randVector(), 20 * Math.random() + 5, 'red'));
+  }
+  return results;
+})();
 
 colors = [];
 
 colors = colors.concat((function() {
-  var k, results;
+  var j, results;
   results = [];
-  for (i = k = 0; k <= 5; i = ++k) {
+  for (i = j = 0; j <= 5; i = ++j) {
     results.push('rgb(0,0,' + (45 * i + 40) + ')');
   }
   return results;
@@ -294,8 +295,8 @@ colors = colors.concat((function() {
 
 console.log(colors);
 
-for (k = 0, len = circles.length; k < len; k++) {
-  circle = circles[k];
+for (j = 0, len = circles.length; j < len; j++) {
+  circle = circles[j];
   circle.setColor(colors[~~(Math.random() * colors.length)]);
   circle.draw();
 }
@@ -351,7 +352,7 @@ collide = function(quadtree, circle, other) {
 createjs.Ticker.framerate = 60;
 
 createjs.Ticker.addEventListener('tick', frame = function(event) {
-  var a, error, l, len1, len2, len3, len4, m, n, o, other, quadtree, temp;
+  var a, error, k, l, len1, len2, len3, len4, m, n, other, quadtree, temp;
   if (event == null) {
     event = {
       delta: 1000
@@ -381,8 +382,8 @@ createjs.Ticker.addEventListener('tick', frame = function(event) {
   stage.update()
    */
   temp = circles.slice(0);
-  for (l = 0, len1 = circles.length; l < len1; l++) {
-    circle = circles[l];
+  for (k = 0, len1 = circles.length; k < len1; k++) {
+    circle = circles[k];
     circle.move(event.delta / 1000);
   }
 
@@ -391,8 +392,8 @@ createjs.Ticker.addEventListener('tick', frame = function(event) {
     energy += circle.mass() * circle.vector.length() #* circle.vector.length()
    */
   quadtree = new Quadrant(stage, new Point(0, 0), new Point($(window).width(), $(window).height()));
-  for (m = 0, len2 = circles.length; m < len2; m++) {
-    circle = circles[m];
+  for (l = 0, len2 = circles.length; l < len2; l++) {
+    circle = circles[l];
     if (circle.point.x - circle.radius < 0) {
       circle.vector = circle.vector.scale(-1, 1);
       circle.point.x = circle.radius;
@@ -411,18 +412,17 @@ createjs.Ticker.addEventListener('tick', frame = function(event) {
     }
     quadtree.insert(circle);
   }
-  for (n = 0, len3 = circles.length; n < len3; n++) {
-    circle = circles[n];
+  for (m = 0, len3 = circles.length; m < len3; m++) {
+    circle = circles[m];
     a = quadtree.retrieve(circle);
-    for (o = 0, len4 = a.length; o < len4; o++) {
-      other = a[o];
+    for (n = 0, len4 = a.length; n < len4; n++) {
+      other = a[n];
       try {
         if (circle.intersect(other)) {
           collide(quadtree, circle, other);
         }
       } catch (_error) {
         error = _error;
-        console.log(circle, a, n);
       }
     }
   }
