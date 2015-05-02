@@ -17,7 +17,8 @@ class Quadrant
     if circle.point.x - circle.radius < @center.x < circle.point.x + circle.radius or circle.point.y - circle.radius < @center.y < circle.point.y + circle.radius then -1 else (if circle.point.x > @center.x then 1 else 0) + (if circle.point.y > @center.y then 2 else 0)
 
   insert: (circle) ->
-    #console.log circle
+    if not circle?
+      console.log circle
     num = @index(circle)
     if num == -1
       @circles.push(circle)

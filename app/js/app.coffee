@@ -41,61 +41,24 @@ collide = (quadtree, circle, other) ->
   offset = un.scale((circle.radius + other.radius) - circle.distance(other)+1)
   m1 = circle.mass()
   m2 = other.mass()
-  quadtree.remove(circle)
-  quadtree.remove(other)
+  #quadtree.remove(circle)
+  #quadtree.remove(other)
   circle.point = circle.point.add(offset.reverse().scale(m2/(m1+m2)))
   other.point = other.point.add(offset.scale(m1/(m1+m2)))
   v1nprime = un.scale((v1n * (m1-m2) + 2*m2*v2n) / (m1+m2))
   v2nprime = un.scale((v2n * (m2-m1) + 2*m1*v1n) / (m1+m2))
   circle.vector = v1nprime.add(ut.scale(v1t))
   other.vector = v2nprime.add(ut.scale(v2t))
-  quadtree.insert(circle)
-  quadtree.insert(other)
-  ###for third in quadtree.retrieve(circle)
-    if circle.intersect(third)
-      collide(quadtree, circle, third)
-  for third in quadtree.retrieve(other)
-    if other.intersect(third)
-      collide(quadtree, other, third)###
-
-#bump = ->
-  #for circle in circles
-    #if circle.
+  #quadtree.insert(circle)
+  #quadtree.insert(other)
 
 createjs.Ticker.framerate = 60
 createjs.Ticker.addEventListener 'tick', frame = (event={delta: 1000}) ->
-
-  ###while true
-    circle = new Circle(stage, randPoint(), new Vector(0,0), 25, 'red')
-    if circles.every((c) -> !c.intersect(circle))
-      circle.draw()
-      circles.push(circle)
-      break###
-
-  ###for circle in circles
-    circle.move(event.delta/1000)
-    circle.vector.dy += 10
-    if circle.point.y + circle.radius > $(window).height()
-      circle.vector.dy = -circle.vector.dy * .80
-      circle.point.y = $(window).height() - circle.radius
-      circle.setColor(colors[colors.indexOf(circle.color)+1])
-  circles = circles.filter((c) ->
-    console.log c.visible
-    c.visible
-    )
-  console.log circles.length
-  stage.update()###
-
 
   temp = circles[..]
 
   for circle in circles
     circle.move(event.delta/1000)
-    #circle.vector.dy += 2000 * event.delta/1000
-
-  ###energy = 0
-  for circle in circles
-    energy += circle.mass() * circle.vector.length() #* circle.vector.length()###
 
   quadtree = new Quadrant(stage, new Point(0, 0), new Point($(window).width(), $(window).height()))
   for circle in circles
@@ -114,13 +77,10 @@ createjs.Ticker.addEventListener 'tick', frame = (event={delta: 1000}) ->
     quadtree.insert(circle)
   for circle in circles
     a = quadtree.retrieve(circle)
+    console.log a
     for other in a
-    #for other in circles
-      #console.log other
-      try
-        if circle.intersect(other)
-          collide(quadtree, circle, other)
-      catch error
+      if circle.intersect(other)
+        collide(quadtree, circle, other)
  
   #console.log createjs.Ticker.getMeasuredFPS()
   #console.log energy
