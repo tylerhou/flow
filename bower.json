@@ -1,5 +1,5 @@
 {
-  "name": "lyrics",
+  "name": "flow",
   "version": "0.0.0",
   "main": [
     "./public/js/app.js"
@@ -7,7 +7,7 @@
   "authors": [
     "Tyler Hou <thou@exeter.edu>"
   ],
-  "description": "lyric expletive checker inspired by brandon liu, marshall vail, and carson flemings' csc420 project",
+  "description": "clone of bharat armilli's 420 project",
   "moduleType": [
     "node"
   ],
